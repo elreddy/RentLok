@@ -26,9 +26,13 @@ This project demonstrates a real-time, event-driven architecture where property 
 - Ingests data from the mobile app and streams events to Kafka
 
 ---
+## 🔧 System Architecture Diagram
+<div align="center">
+  <img src="DataFlow.JPG" width="550">
+</div>
+
 
 Stay tuned for:
-- 🔧 System Architecture Diagram
 - 🚀 Setup & Deployment Instructions
 - 📡 Kafka Stream/Table Definitions
 - 📲 Android App Screenshots and Usage Guide
