@@ -19,7 +19,7 @@ This project demonstrates a real-time, event-driven architecture where property 
 
 ### 🔄 Confluent Kafka
 - Enables **real-time messaging and event handling**
-- Streams live updates to mobile app like **current vacancies**, **daily inquiries**, and other key operational data.
+- - Streams live updates to the app, enabling metrics like **current vacancies**, **daily inquiries**, and other key operational data.
 
 ### ⚡ FastAPI
 - Serves as a **lightweight backend API**
