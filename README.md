@@ -33,10 +33,33 @@ This project demonstrates a real-time, event-driven architecture where property 
 3. **FastAPI** → Kafka (publishing events)
 4. **Kafka** → Mobile App (real-time updates via consumer)
 
+## 📱 Android App: Home Screen
 
-Stay tuned for:
-- 🚀 Setup & Deployment Instructions
-- 📡 Kafka Stream/Table Definitions
-- 📲 Android App Screenshots and Usage Guide
+The **RentLok** Android app provides a clean and intuitive user interface for property managers to efficiently navigate the system.
+
+### Home Screen Overview
+<table>
+  <tr>
+    <td><img src="SplashScreen.JPG" width="220"></td>
+    <td style="padding-left;"><img src="HomeScreen.JPG" width="220"></td>
+  </tr>
+</table>
+
+The **Home** screen acts as the central hub, offering quick access to the core modules of the RentLok system:
+
+| Feature          | Description                                                                 |
+|------------------|-----------------------------------------------------------------------------|
+| 🏢 **My Business** | View and update your business profile and settings                         |
+| 🏠 **Properties**   | Manage property listings, add new properties, and view details             |
+| 🚪 **Rooms**        | Add rooms to properties, set availability, and manage room metadata        |
+| 💵 **Requests**     | View and handle incoming inquiries or service requests                     |
+| 👥 **Tenants**      | Maintain tenant records and history                                        |
+| 📅 **Bookings**     | Create, view, and manage tenant bookings and stay durations                |
+| 💰 **Payments**     | Log and track rent payments, view history, and check dues                  |
+
+The settings icon ⚙️ at the bottom-right provides access to configuration and future customization options.
+
+This modular approach ensures each function is logically grouped, enabling a user-friendly experience for non-technical users like landlords and rental agents.
+
 
 
