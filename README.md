@@ -8,22 +8,18 @@ This project demonstrates a real-time, event-driven architecture where property 
 
 ## ✅ Features
 
-### 📲 Mobile App for Property Owners to:
-- Add and manage **room/property details**
-- Log **inquiries** and monitor **room availability**
-- Record **tenant bookings** and **payment history**
+### 📲 Mobile App (Android)
+- Add/manage properties & rooms
+- Track room availability & inquiries
+- Record tenant bookings & payments
+- View real-time operational metrics
 
-### 🛠️ PostgreSQL
-- Acts as the **central transactional database**
-- Stores all core rental and operational data
-
-### 🔄 Confluent Kafka
-- Enables **real-time messaging and event handling**
-- Streams live updates to the app, enabling metrics like **current vacancies**, **daily inquiries**, and other key operational data.
-
-### ⚡ FastAPI
-- Serves as a **lightweight backend API**
-- Ingests data from the mobile app and streams events to Kafka
+### 🛠️ Backend Stack
+| Component       | Role                                                                 |
+|-----------------|----------------------------------------------------------------------|
+| **PostgreSQL**  | Central transactional database for rental/operational data           |
+| **Confluent Kafka** | Real-time event streaming for live updates (vacancies, inquiries, etc.) |
+| **FastAPI**     | Middleware connecting app ↔ database ↔ Kafka   
 
 ---
 ## 🔧 System Architecture Diagram
@@ -32,7 +28,15 @@ This project demonstrates a real-time, event-driven architecture where property 
 </div>
 
 
+1. **Mobile App** → FastAPI (REST calls)
+2. **FastAPI** → PostgreSQL (CRUD operations)
+3. **FastAPI** → Kafka (publishing events)
+4. **Kafka** → Mobile App (real-time updates via consumer)
+
+
 Stay tuned for:
 - 🚀 Setup & Deployment Instructions
 - 📡 Kafka Stream/Table Definitions
 - 📲 Android App Screenshots and Usage Guide
+
+
