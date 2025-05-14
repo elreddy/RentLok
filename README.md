@@ -49,7 +49,7 @@ The **Home** screen acts as the central hub, offering quick access to the core m
 
 | Feature          | Description                                                                 |
 |------------------|-----------------------------------------------------------------------------|
-| 🏢 **My Business** | View and update your business profile and settings                         |
+| 🏢 **My Business** | Real-time dashboard showing vacancies and daily/monthly requests via Kafka |
 | 🏠 **Properties**   | Manage property listings, add new properties, and view details             |
 | 🚪 **Rooms**        | Add rooms to properties, set availability, and manage room metadata        |
 | 💵 **Requests**     | View and handle incoming inquiries or service requests                     |
