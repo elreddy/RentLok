@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Logo.png" alt="RentLok Logo" width="130"/>
+  <img src="Assets/Logo.png" alt="RentLok Logo" width="130"/>
 </p>
 
 # 📱 RentLok: Rental Management System
@@ -28,7 +28,7 @@ This project demonstrates a real-time, event-driven architecture where property 
 ---
 ## 🔧 System Architecture Diagram
 <div align="center">
-  <img src="DataFlow.JPG" width="550">
+  <img src="Assets/DataFlow.JPG" width="550">
 </div>
 
 
@@ -45,8 +45,8 @@ The **RentLok** Android app provides a clean and intuitive user interface for pr
 ### Home Screen Overview
 <table>
   <tr>
-    <td><img src="SplashScreen.JPG" width="220"></td>
-    <td style="padding-left;"><img src="HomeScreen.JPG" width="220"></td>
+    <td><img src="Assets/SplashScreen.JPG" width="220"></td>
+    <td style="padding-left;"><img src="Assets/HomeScreen.JPG" width="220"></td>
   </tr>
 </table>
 
@@ -95,6 +95,52 @@ This FastAPI service connects the Android app to Confluent Kafka using **ksqlDB 
 
 📄 **Script:** [app_kafka_metrics_service.py](Backend/app_kafka_metrics_service.py)  
 This approach allows your app to consume Kafka stream data without needing a direct Kafka consumer — simplifying real-time integration using HTTP.
+
+## 🗄️ Storage: PostgreSQL
+
+The **PostgreSQL** database is the primary data store for RentLok, supporting persistent, consistent, and structured storage of all rental business operations. It manages properties, rooms, tenants, bookings, payments, and inquiry requests submitted through the Android app. Every change to the business is captured as a structured record in these normalized tables.
+
+### 🧩 ERD Diagram
+
+<div align="center">
+  <img src="Assets/DataModel.png" width="700">
+</div>
+
+### 🗃️ Database Tables Overview
+
+| Table Name     | Description                                                                 |
+|----------------|-----------------------------------------------------------------------------|
+| `properties`   | Stores property-level details like name, address, total rooms, and owner ID |
+| `rooms`        | Lists rooms per property with floor info, type, rent, and status            |
+| `tenants`      | Stores tenant details like name, phone number, and profile description      |
+| `bookings`     | Tracks active room bookings by linking tenants, rooms, and properties       |
+| `payments`     | Stores rent payment records, status, amount, and related booking info       |
+| `requests`     | Captures property inquiry requests from new or prospective tenants          |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Stay Tuned still work in progress.
 
