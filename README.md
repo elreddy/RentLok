@@ -45,8 +45,8 @@ The **RentLok** Android app provides a clean and intuitive user interface for pr
 ### Home Screen Overview
 <table>
   <tr>
-    <td><img src="Assets/SplashScreen.JPG" width="220"></td>
-    <td style="padding-left;"><img src="Assets/HomeScreen.JPG" width="220"></td>
+    <td><img src="Assets/SplashScreen.JPG" width="200"></td>
+    <td style="padding-left;"><img src="Assets/HomeScreen.JPG" width="200"></td>
   </tr>
 </table>
 
@@ -61,6 +61,51 @@ The **Home** screen acts as the central hub, offering quick access to the core m
 | 👥 **Tenants**      | Maintain tenant records and history                                        |
 | 📅 **Bookings**     | Create, view, and manage tenant bookings and stay durations                |
 | 💰 **Payments**     | Log and track rent payments, view history, and check dues                  |
+
+
+## 1) Properties: 
+
+Manage rental properties directly from the mobile app.
+<table>
+  <tr>
+    <td><img src="Assets/PropertiesScreen.JPG" width="200"></td>
+    <td style="padding-left;"><img src="Assets/PropertiesScreen(Add).JPG" width="200"></td>
+  </tr>
+</table>
+
+### 📲 Screen
+
+- **View Properties** – Displays all saved properties with basic details
+- **Add Property** – Input property name, address, and number of rooms
+
+### 🔧 CRUD Operations
+
+- ✅ **Create** → Add new property  
+- 📖 **Read** → View all properties  
+- 📝 **Update** → Update property info  
+- ❌ **Delete** → Mark property as inactive
+
+## 2) Rooms:
+
+Add and manage rooms under each property directly from the mobile app.
+<table>
+  <tr>
+    <td><img src="Assets/RoomsScreen.JPG" width="200"></td>
+    <td><img src="Assets/RoomsScreen(Add).JPG" width="200"></td>
+  </tr>
+</table>
+
+### 📲 Screen
+
+- **View Rooms** – Displays all rooms under a selected property
+- **Add Room** – Input room number, monthly rent, and availability status
+
+### 🔧 CRUD Operations
+
+- ✅ **Create** → Add new room under a selected property  
+- 📖 **Read** → View rooms for a selected property  
+- 📝 **Update** → Update room details (planned)  
+- ❌ **Delete** → Mark room as inactive or remove (planned)
 
 The settings icon ⚙️ at the bottom-right provides access to configuration and future customization options.
 
@@ -103,7 +148,7 @@ The **PostgreSQL** database is the primary data store for RentLok, supporting pe
 ### 🧩 ERD Diagram
 
 <div align="center">
-  <img src="Assets/DataModel.png" width="700">
+  <img src="Assets/DataModel.png" width="650">
 </div>
 
 ### 🗃️ Database Tables Overview
