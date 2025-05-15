@@ -77,7 +77,7 @@ This FastAPI script handles all database interactions and core business logic:
 - Request/response schema handling using **Pydantic**  
 - PostgreSQL connection management using **SQLAlchemy**
 
-📄 **Script:** `backend/app_postgres_service.py`  
+📄 **Script:** [app_postgres_service.py](Backend/app_postgres_service.py)  
 This service ensures reliable data persistence for the rental system.
 
 ### 🔁 Service 2: Android App ↔ Kafka (Confluent Platform)
@@ -89,8 +89,10 @@ This FastAPI service connects the Android app to Confluent Kafka using **ksqlDB 
 - Uses HTTP-based integration with **Confluent ksqlDB REST API**  
 - Provides endpoints to fetch daily, monthly, and current metrics from Kafka streams
 
-📄 **Script :** `backend/app_kafka_metrics_service.py`  
+📄 **Script:** [app_kafka_metrics_service.py](Backend/app_kafka_metrics_service.py)  
 This approach allows your app to consume Kafka stream data without needing a direct Kafka consumer — simplifying real-time integration using HTTP.
+
+## Stay Tuned still work in progress.
 
 
 
