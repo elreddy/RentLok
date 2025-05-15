@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="Logo.png" alt="RentLok Logo" width="130"/>
+</p>
+
 # 📱 RentLok: Rental Management System
 
 **RentLok** is a rental management solution designed to streamline the day-to-day operations of property managers. It enables easy tracking of rooms, bookings, payments, and tenant details through a modern Android mobile app backed by a robust data pipeline using PostgreSQL and Confluent Kafka.
