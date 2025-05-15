@@ -89,6 +89,7 @@ class Payment(Base):
     payment_status = Column(String(20), nullable=False)
     amount = Column(Float, nullable=False)
     payment_date = Column(Date, default=date.today)
+    payment_month = Column(String(20), nullable=True) 
     is_active = Column(Integer, default=1)
 
     booking = relationship("Booking", back_populates="payments")
@@ -201,6 +202,7 @@ class PaymentBase(BaseModel):
     payment_type: str
     payment_status: str
     amount: float
+    payment_month: Optional[str] = None
 
 class PaymentCreate(PaymentBase):
     pass
