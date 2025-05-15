@@ -2,7 +2,7 @@
   <img src="Assets/Logo.png" alt="RentLok Logo" width="130"/>
 </p>
 
-# 📱 RentLok: Rental Management System
+# 📱 RentLok: Rental Management System (Version 1.0)
 
 **RentLok** is a rental management solution designed to streamline the day-to-day operations of property managers. It enables easy tracking of rooms, bookings, payments, and tenant details through a modern Android mobile app backed by a robust data pipeline using PostgreSQL and Confluent Kafka.
 
@@ -104,8 +104,79 @@ Add and manage rooms under each property directly from the mobile app.
 
 - ✅ **Create** → Add new room under a selected property  
 - 📖 **Read** → View rooms for a selected property  
-- 📝 **Update** → Update room details (planned)  
-- ❌ **Delete** → Mark room as inactive or remove (planned)
+- 📝 **Update** → Update room details  
+- ❌ **Delete** → Mark room as inactive
+
+## 3) Requests:
+
+Track and manage room rental inquiries for each property from the mobile app.
+
+<table>
+  <tr>
+    <td><img src="Assets/RequestsScreen.JPG" width="200"></td>
+    <td><img src="Assets/RequestsScreen(Add).JPG" width="200"></td>
+  </tr>
+</table>
+
+### 📲 Screen
+
+- **View Requests** – Displays rental inquiries submitted for a selected property
+- **Add Request** – Capture name, contact, and inquiry notes from interested tenants
+
+### 🔧 CRUD Operations
+
+- ✅ **Create** → Submit a new room inquiry  
+- 📖 **Read** → View all rental requests for a property  
+- 📝 **Update** → (Planned) Update request status or details  
+- ❌ **Delete** → (Planned) Remove closed or invalid requests
+
+## 4) Tenants:
+
+Manage tenant details directly within the mobile app.
+
+<table>
+  <tr>
+    <td><img src="Assets/TenantsScreen.JPG" width="200"></td>
+    <td><img src="Assets/TenantsScreen(Add).JPG" width="200"></td>
+  </tr>
+</table>
+
+### 📲 Screen
+
+- **View Tenants** – Displays all active tenants.
+- **Add Tenant** – Input tenant name, contact info, room number, and check-in date
+
+### 🔧 CRUD Operations
+
+- ✅ **Create** → Add a new tenant to a room  
+- 📖 **Read** → View tenant list for a property  
+- 📝 **Update** → Update tenant details  
+- ❌ **Delete** → Mark tenant as vacated or remove record
+
+## 5) Bookings:
+
+Track and manage room bookings for properties directly within the mobile app.
+
+<table>
+  <tr>
+    <td><img src="Assets/BookingsScreen.JPG" width="200"></td>
+    <td><img src="Assets/BookingsScreen(Add).JPG" width="200"></td>
+  </tr>
+</table>
+
+### 📲 Screen
+
+- **View Bookings** – Lists all current and past room bookings for a property
+- **Add Booking** – Select room and enter tenant details along with check-in/check-out dates
+
+### 🔧 CRUD Operations
+
+- ✅ **Create** → Record a new booking for a room  
+- 📖 **Read** → View all bookings under a property  
+- 📝 **Update** → Modify booking dates or details  
+- ❌ **Delete** → Cancel or archive a booking
+
+
 
 The settings icon ⚙️ at the bottom-right provides access to configuration and future customization options.
 
