@@ -234,6 +234,8 @@ The settings icon ⚙️ at the bottom-right provides access to configuration an
 
 This modular approach ensures each function is logically grouped, enabling a user-friendly experience for non-technical users like landlords and rental agents.
 
+---
+
 ## ⚙️ Backend: FastAPI Services
 
 The backend is built using **FastAPI**, serving as the core middleware for handling RESTful API requests between the Android app, PostgreSQL, and Kafka.
@@ -264,10 +266,13 @@ This FastAPI service connects the Android app to Confluent Kafka using **ksqlDB 
 📄 **Script:** [app_kafka_metrics_service.py](Backend/app_kafka_metrics_service.py)  
 This approach allows your app to consume Kafka stream data without needing a direct Kafka consumer — simplifying real-time integration using HTTP.
 
+---
+
 ## 🗄️ Storage: PostgreSQL
 
 The **PostgreSQL** database is the primary data store for RentLok, supporting persistent, consistent, and structured storage of all rental business operations. It manages properties, rooms, tenants, bookings, payments, and inquiry requests submitted through the Android app. Every change to the business is captured as a structured record in these normalized tables.
 
+---
 ### 🧩 ERD Diagram
 
 <div align="center">
@@ -285,11 +290,13 @@ The **PostgreSQL** database is the primary data store for RentLok, supporting pe
 | `payments`     | Stores rent payment records, status, amount, and related booking info       |
 | `requests`     | Captures property inquiry requests from new or prospective tenants          |
 
+---
 
-## Confluent Kafka Integration
+## 🌀 Confluent Kafka Integration
 
 The RentLog application uses **Confluent Kafka** with **ksqlDB** for real-time streaming, transformation, and aggregation of property rental data. This enables dynamic insights on tenant requests and property vacancies directly in the dashboard.
 
+---
 ### 🔌 Kafka Connect
 
 - **Connector**: Kafka Connect JDBC Source Connector
@@ -300,7 +307,6 @@ The RentLog application uses **Confluent Kafka** with **ksqlDB** for real-time s
   - `rentlok-rooms`
   - `rentlok-properties`
 - **Respective Connector Config Files** are available in directory : [Connectors](Connectors) 
----
 
 ### 🔄 Stream Processing with ksqlDB
 
@@ -319,8 +325,6 @@ The RentLog application uses **Confluent Kafka** with **ksqlDB** for real-time s
 | `requests_stream` | `rentlok-requests`   | Raw request data                       |
 | `rooms_stream`    | `rentlok-rooms`      | Raw room metadata                      |
 | `properties_stream`| `rentlok-properties`| Raw property information               |
-
----
 
 #### 📊 TABLES Created & Aggregations
 
@@ -341,15 +345,6 @@ All ksqlDB stream and table creation commands are included in the attached file:
 📄[ksqldb_tables_script](Backend/ksqldb_tables_script.txt)
 
 ---
-
-### 🧠 ksqlDB Flow Summary
-
-```plaintext
-Kafka Topics (from JDBC Source)
-  → Streams (requests_stream, rooms_stream, properties_stream)
-    → Tables (requests_table, rooms_table, properties_table)
-      → Aggregations (daily/monthly requests, vacancies)
-        → Final Tables (daily_requests, monthly_requests, current_vacancies)
 
 
 
