@@ -271,7 +271,7 @@ The **PostgreSQL** database is the primary data store for RentLok, supporting pe
 ### 🧩 ERD Diagram
 
 <div align="center">
-  <img src="Assets/DataModel.png" width="650">
+  <img src="Assets/DataModel.png" width="550" >
 </div>
 
 ### 🗃️ Database Tables Overview
@@ -286,31 +286,70 @@ The **PostgreSQL** database is the primary data store for RentLok, supporting pe
 | `requests`     | Captures property inquiry requests from new or prospective tenants          |
 
 
+## Confluent Kafka Integration
 
+The RentLog application uses **Confluent Kafka** with **ksqlDB** for real-time streaming, transformation, and aggregation of property rental data. This enables dynamic insights on tenant requests and property vacancies directly in the dashboard.
 
+### 🔌 Kafka Connect
 
+- **Connector**: Kafka Connect JDBC Source Connector
+- **Mode**: Incrementing (based on primary key)
+- **Source**: PostgreSQL tables – `requests`, `rooms`, `properties`
+- **Topics Produced**:
+  - `rentlok-requests`
+  - `rentlok-rooms`
+  - `rentlok-properties`
+- **Respective Connector Config Files** are available in directory : [Connectors](Connectors) 
+---
 
+### 🔄 Stream Processing with ksqlDB
 
+> ksqlDB is used for transforming source Kafka topics into meaningful, queryable **streams** and **tables**.
 
+### 📷 Flow Diagram
 
+<div align="center">
+  <img src="Assets/StreamsFlow.JPG" width="550" >
+</div>
 
+#### ✅ STREAMS Defined
 
+| Stream Name       | Source Topic         | Purpose                                |
+|-------------------|----------------------|----------------------------------------|
+| `requests_stream` | `rentlok-requests`   | Raw request data                       |
+| `rooms_stream`    | `rentlok-rooms`      | Raw room metadata                      |
+| `properties_stream`| `rentlok-properties`| Raw property information               |
 
+---
 
+#### 📊 TABLES Created & Aggregations
 
+| Table Name              | Description                                                      |
+|-------------------------|------------------------------------------------------------------|
+| `requests_table`        | Latest version of each request                                   |
+| `properties_table`      | Latest version of each property                                  |
+| `rooms_table`           | Latest room details per room ID                                  |
+| `property_vacancies`    | Total vacant rooms per property                                  |
+| `current_vacancies`     | Joined with property info; filters active properties             |
+| `daily_requests_agg`    | Aggregates active requests per property per date                 |
+| `monthly_requests_agg`  | Aggregates active requests per property per month                |
+| `daily_requests`        | Joins `daily_requests_agg` with property info (for today's date) |
+| `monthly_requests`      | Joins `monthly_requests_agg` with property info (for current month) |
 
+#### 🗂️ Script File
+All ksqlDB stream and table creation commands are included in the attached file:
+📄[ksqldb_tables_script](Backend/ksqldb_tables_script.txt)
 
+---
 
+### 🧠 ksqlDB Flow Summary
 
-
-
-
-
-
-
-
-
-## Stay Tuned still work in progress.
+```plaintext
+Kafka Topics (from JDBC Source)
+  → Streams (requests_stream, rooms_stream, properties_stream)
+    → Tables (requests_table, rooms_table, properties_table)
+      → Aggregations (daily/monthly requests, vacancies)
+        → Final Tables (daily_requests, monthly_requests, current_vacancies)
 
 
 
