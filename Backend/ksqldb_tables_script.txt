@@ -1,0 +1,207 @@
+Properties:
+------------
+1)
+
+CREATE STREAM properties_stream (
+    property_id INT,
+    property_name VARCHAR,
+    address VARCHAR,
+    no_of_rooms INT,
+    is_active INT
+) WITH (
+    KAFKA_TOPIC='rentlok-properties',
+    VALUE_FORMAT='JSON'
+);
+
+2) 
+
+CREATE TABLE PROPERTIES_TABLE AS
+SELECT 
+    PROPERTY_ID,
+    LATEST_BY_OFFSET(PROPERTY_NAME) AS PROPERTY_NAME,
+    LATEST_BY_OFFSET(ADDRESS) AS ADDRESS,
+    LATEST_BY_OFFSET(NO_OF_ROOMS) AS NO_OF_ROOMS,
+    LATEST_BY_OFFSET(IS_ACTIVE) AS IS_ACTIVE
+FROM PROPERTIES_STREAM
+GROUP BY PROPERTY_ID;
+
+Rooms:
+-------------
+
+1)
+
+CREATE STREAM rooms_stream (
+    room_id INT,
+    room_no VARCHAR,
+    floor_no INT,
+    property_id INT,
+    operational_status VARCHAR,
+    room_type VARCHAR,
+    rent_per_month DOUBLE,
+    is_active INT
+) WITH (
+    KAFKA_TOPIC='rentlok-rooms',
+    VALUE_FORMAT='JSON'
+);
+
+2) 
+
+CREATE TABLE ROOMS_TABLE AS
+SELECT ROOM_ID,
+       LATEST_BY_OFFSET(ROOM_NO) as ROOM_NO ,
+       LATEST_BY_OFFSET(FLOOR_NO) AS FLOOR_NO,
+       LATEST_BY_OFFSET(PROPERTY_ID) as PROPERTY_ID ,
+       LATEST_BY_OFFSET(OPERATIONAL_STATUS) as OPERATIONAL_STATUS,
+       LATEST_BY_OFFSET(ROOM_TYPE) AS ROOM_TYPE,
+       LATEST_BY_OFFSET(RENT_PER_MONTH) AS RENT_PER_MONTH,
+       LATEST_BY_OFFSET(IS_ACTIVE) as IS_ACTIVE
+FROM  ROOMS_STREAM
+GROUP BY ROOM_ID;
+
+
+FINAL TABLES:
+---------------
+
+1) AGG TABLE:
+
+CREATE TABLE PROPERTY_VACANCIES AS
+SELECT 
+    property_id,
+    SUM(CASE WHEN operational_status = 'vacant' AND is_active = 1 THEN 1 ELSE 0 END) AS vacancies
+FROM ROOMS_TABLE
+GROUP BY property_id
+EMIT CHANGES;
+
+2) RESULT TABLE
+
+CREATE TABLE CURRENT_VACANCIES AS
+SELECT 
+    p.property_id AS property_id,
+    p.property_name AS property_name,
+    p.address AS address,
+    p.no_of_rooms AS total_rooms,
+    p.is_active AS is_active,
+    v.vacancies AS vacancies
+FROM PROPERTIES_TABLE p
+LEFT JOIN PROPERTY_VACANCIES v
+ON p.property_id = v.property_id
+WHERE p.is_active = 1
+EMIT CHANGES;
+
+
+
+Requests:
+------------
+
+1)
+
+CREATE STREAM requests_stream (
+    request_id INT,
+    request_date VARCHAR,
+    tenant_name VARCHAR,
+    phone_no VARCHAR,
+    details VARCHAR,
+    property_id INT,
+    is_active INT
+) WITH (
+    KAFKA_TOPIC='rentlok-requests',
+    VALUE_FORMAT='JSON'
+);
+
+
+2)
+
+CREATE TABLE REQUESTS_TABLE AS
+SELECT REQUEST_ID,
+       LATEST_BY_OFFSET(REQUEST_DATE) as REQUEST_DATE,
+       LATEST_BY_OFFSET(TENANT_NAME) as TENANT_NAME,
+       LATEST_BY_OFFSET(PHONE_NO) as PHONE_NO,
+       LATEST_BY_OFFSET(DETAILS) as DETAILS,
+       LATEST_BY_OFFSET(PROPERTY_ID) as PROPERTY_ID,
+       LATEST_BY_OFFSET(IS_ACTIVE) as IS_ACTIVE
+FROM  REQUESTS_STREAM 
+GROUP BY REQUEST_ID;
+
+
+FINALE TABLES:
+--------------
+
+1) AGG TABLES:
+
+CREATE TABLE DAILY_REQUESTS_AGG 
+WITH (
+    FORMAT = 'JSON',
+    PARTITIONS = 1
+) AS
+SELECT 
+    request_date,
+    property_id,
+    COUNT(request_id) AS total_requests
+FROM REQUESTS_TABLE
+WHERE is_active = 1
+GROUP BY request_date, property_id
+EMIT CHANGES;
+
+CREATE TABLE MONTHLY_REQUESTS_AGG 
+WITH (
+    FORMAT = 'JSON',
+    PARTITIONS = 1
+) AS
+SELECT 
+    SUBSTRING(request_date, 1, 7) AS year_month,
+    property_id,
+    COUNT(request_id) AS total_requests
+FROM REQUESTS_TABLE
+WHERE is_active = 1
+GROUP BY SUBSTRING(request_date, 1, 7), property_id
+EMIT CHANGES;
+
+
+2) RESULT TABLES:
+
+CREATE TABLE DAILY_REQUESTS
+WITH (
+    FORMAT = 'JSON',
+    PARTITIONS = 1
+) AS
+SELECT 
+    d.request_date, 
+    d.property_id as property_id,
+    p.property_name,
+    p.address,
+    p.is_active,
+    d.total_requests
+FROM DAILY_REQUESTS_AGG d
+JOIN PROPERTIES_TABLE p 
+  ON d.property_id = p.property_id
+WHERE 
+    d.request_date = SUBSTRING(
+        TIMESTAMPTOSTRING(UNIX_TIMESTAMP(), 'yyyy-MM-dd HH:mm:ss'), 
+        1, 
+        10
+    )
+    AND p.is_active = 1
+EMIT CHANGES;
+
+CREATE TABLE MONTHLY_REQUESTS
+WITH (
+    FORMAT = 'JSON',
+    PARTITIONS = 1
+) AS
+SELECT 
+    m.year_month,
+    m.property_id,
+    p.property_name,
+    p.address,
+    m.total_requests
+FROM MONTHLY_REQUESTS_AGG m
+JOIN PROPERTIES_TABLE p
+  ON m.property_id = p.property_id
+WHERE 
+    m.year_month = SUBSTRING(
+        TIMESTAMPTOSTRING(UNIX_TIMESTAMP(), 'yyyy-MM-dd HH:mm:ss'), 
+        1, 
+        7
+    )
+    AND p.is_active = 1
+EMIT CHANGES;
