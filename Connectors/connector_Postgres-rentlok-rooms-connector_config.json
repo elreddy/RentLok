@@ -1,0 +1,17 @@
+{
+  "name": "Postgres-rentlok-rooms-connector",
+  "config": {
+    "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "connection.url": "jdbc:postgresql://192.168.56.101:5432/rentlok",
+    "connection.user": "rentlok",
+    "connection.password": "rentlok",
+    "table.whitelist": "rooms",
+    "mode": "incrementing",
+    "incrementing.column.name": "room_id",
+    "poll.interval.ms": "1000",
+    "topic.prefix": "rentlok-",
+    "value.converter.schemas.enable": "false"
+  }
+}
