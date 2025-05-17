@@ -346,6 +346,28 @@ All ksqlDB stream and table creation commands are included in the attached file:
 
 ---
 
+## 📌 Summary & Final Notes
+
+**RentLok** offers an end-to-end solution for rental property management using modern technologies like **PostgreSQL**, **FastAPI**, and **Confluent Kafka**, integrated with a native **Android frontend**.
+
+> ⚠️ Currently, this system is built for **single-user access** and does not support multi-user logins or security roles.  
+> Future versions will include:
+> - Role-based access controls  
+> - User authentication and authorization  
+> - Encrypted communications  
+> - Richer tenant and landlord app features  
+
+---
+
+## 📬 Connect with Me
+
+Feel free to connect for feedback, improvements, or collaboration opportunities.
+
+- 💼 [LinkedIn](https://www.linkedin.com/in/eegapuri-lokeshwar-reddy-281327308)
+- 💻 [GitHub](https://github.com/elreddy)
+- 📧 Email: elokesh4292@gmail.com
+
+
 
 
 
