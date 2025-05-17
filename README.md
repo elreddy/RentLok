@@ -62,7 +62,7 @@ The **Home** screen acts as the central hub, offering quick access to the core m
 | 📅 **Bookings**     | Create, view, and manage tenant bookings and stay durations                |
 | 💰 **Payments**     | Log and track rent payments, view history, and check dues                  |
 
-## 1) My Business Dashboard:
+## 1) My Business:
 
 Get a real-time overview of your rental business powered by Confluent Kafka integration.
 
