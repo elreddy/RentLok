@@ -5,6 +5,21 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, Session
 from datetime import datetime, date
 from typing import Optional, List
+from confluent_kafka import Producer
+import json
+
+KAFKA_CONFIG = {
+    'bootstrap.servers': '192.168.56.101:9092'
+}
+
+producer = Producer(KAFKA_CONFIG)
+
+def delivery_report(err, msg):
+    if err:
+        print(f"Message delivery failed: {err}")
+    else:
+        print(f"Message delivered to {msg.topic()} [{msg.partition()}]")
+
 
 DATABASE_URL = "postgresql://rentlok:rentlok@192.168.56.101:5432/rentlok"
 engine = create_engine(DATABASE_URL)
@@ -89,7 +104,7 @@ class Payment(Base):
     payment_status = Column(String(20), nullable=False)
     amount = Column(Float, nullable=False)
     payment_date = Column(Date, default=date.today)
-    payment_month = Column(String(20), nullable=True) 
+    payment_month = Column(String(20), nullable=True)
     is_active = Column(Integer, default=1)
 
     booking = relationship("Booking", back_populates="payments")
@@ -219,7 +234,7 @@ class PaymentResponse(PaymentBase):
         orm_mode = True
 
 class RequestBase(BaseModel):
-    property_id: int  
+    property_id: int
     tenant_name: str
     phone_no: str
     details: Optional[str] = None
@@ -279,6 +294,15 @@ def update_property(property_id: int, property: PropertyUpdate, db: Session = De
 
     db.commit()
     db.refresh(db_property)
+
+    push_to_kafka("rentlok-properties", {
+    "property_id": db_property.property_id,
+    "property_name": db_property.property_name,
+    "address": db_property.address,
+    "no_of_rooms": db_property.no_of_rooms,
+    "is_active": db_property.is_active
+    })
+
     return db_property
 
 @app.delete("/properties/{property_id}")
@@ -290,17 +314,40 @@ def delete_property(property_id: int, db: Session = Depends(get_db)):
     if db_property is None:
         raise HTTPException(status_code=404, detail="Property not found")
 
-    # Soft delete property and its rooms
+    # Soft delete property
     db_property.is_active = 0
 
-    # Soft delete all rooms belonging to this property
-    db.query(Room).filter(Room.property_id == property_id).update({"is_active": 0})
+    # Soft delete all rooms belonging to this property and push to Kafka
+    rooms_to_update = db.query(Room).filter(Room.property_id == property_id, Room.is_active == 1).all()
+    for room in rooms_to_update:
+        room.is_active = 0
+        push_to_kafka("rentlok-rooms", {
+            "room_id": room.room_id,
+            "room_no": room.room_no,
+            "floor_no": room.floor_no,
+            "property_id": room.property_id,
+            "operational_status": room.operational_status,
+            "room_type": room.room_type,
+            "rent_per_month": room.rent_per_month,
+            "is_active": 0
+        })
+
+    # Push the property soft-delete to Kafka
+    push_to_kafka("rentlok-properties", {
+        "property_id": db_property.property_id,
+        "property_name": db_property.property_name,
+        "address": db_property.address,
+        "no_of_rooms": db_property.no_of_rooms,
+        "is_active": 0
+    })
 
     db.commit()
+
     return {
         "message": "Property and its rooms marked as inactive",
-        "inactivated_rooms": db.query(Room).filter(Room.property_id == property_id).count()
+        "inactivated_rooms": len(rooms_to_update)
     }
+
 
 # ================== Room Endpoints ==================
 @app.post("/rooms/", response_model=RoomResponse)
@@ -369,6 +416,18 @@ def update_room(room_id: int, room: RoomUpdate, db: Session = Depends(get_db)):
 
     db.commit()
     db.refresh(db_room)
+
+    push_to_kafka("rentlok-rooms", {
+    "room_id": db_room.room_id,
+    "room_no": db_room.room_no,
+    "floor_no": db_room.floor_no,
+    "property_id": db_room.property_id,
+    "operational_status": db_room.operational_status,
+    "room_type": db_room.room_type,
+    "rent_per_month": db_room.rent_per_month,
+    "is_active": db_room.is_active
+    })
+
     return db_room
 
 @app.delete("/rooms/{room_id}")
@@ -381,6 +440,17 @@ def delete_room(room_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Room not found")
 
     db_room.is_active = 0
+    push_to_kafka("rentlok-rooms",
+    {
+    "room_id": db_room.room_id,
+    "room_no": db_room.room_no,
+    "floor_no": db_room.floor_no,
+    "property_id": db_room.property_id,
+    "operational_status": db_room.operational_status,
+    "room_type": db_room.room_type,
+    "rent_per_month": db_room.rent_per_month,
+    "is_active": db_room.is_active
+    })
     db.commit()
     return {"message": "Room marked as inactive"}
 
@@ -551,6 +621,18 @@ def update_booking(booking_id: int, booking: BookingUpdate, db: Session = Depend
 
     db.commit()
     db.refresh(db_booking)
+
+    push_to_kafka("rentlok-rooms", {
+    "room_id": db_room.room_id,
+    "room_no": db_room.room_no,
+    "floor_no": db_room.floor_no,
+    "property_id": db_room.property_id,
+    "operational_status": db_room.operational_status,
+    "room_type": db_room.room_type,
+    "rent_per_month": db_room.rent_per_month,
+    "is_active": db_room.is_active
+    })
+
     return db_booking
 
 @app.delete("/bookings/{booking_id}")
@@ -572,6 +654,17 @@ def delete_booking(booking_id: int, db: Session = Depends(get_db)):
 
     # Soft delete all payments for this booking
     db.query(Payment).filter(Payment.booking_id == booking_id).update({"is_active": 0})
+
+    push_to_kafka("rentlok-rooms", {
+    "room_id": db_room.room_id,
+    "room_no": db_room.room_no,
+    "floor_no": db_room.floor_no,
+    "property_id": db_room.property_id,
+    "operational_status": db_room.operational_status,
+    "room_type": db_room.room_type,
+    "rent_per_month": db_room.rent_per_month,
+    "is_active": db_room.is_active
+    })
 
     db.commit()
     return {
@@ -660,7 +753,7 @@ def delete_payment(payment_id: int, db: Session = Depends(get_db)):
 def create_request(request: RequestCreate, db: Session = Depends(get_db)):
     if request.property_id == 0:
         raise HTTPException(status_code=400, detail="Property ID cannot be 0")
-        
+
     db_property = db.query(Property).filter(
         Property.property_id == request.property_id,
         Property.is_active == 1
@@ -716,6 +809,17 @@ def update_request(request_id: int, request: RequestUpdate, db: Session = Depend
 
     db.commit()
     db.refresh(db_request)
+
+    push_to_kafka("rentlok-requests",{
+    "request_id": db_request.request_id,
+    "request_date": db_request.request_date.isoformat(),
+    "tenant_name": db_request.tenant_name,
+    "phone_no": db_request.phone_no,
+    "details": db_request.details,
+    "property_id": db_request.property_id,
+    "is_active": db_request.is_active
+    })
+
     return db_request
 
 @app.delete("/requests/{request_id}")
@@ -728,5 +832,29 @@ def delete_request(request_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Request not found")
 
     db_request.is_active = 0
+    push_to_kafka("rentlok-requests",{
+    "request_id": db_request.request_id,
+    "request_date": db_request.request_date.isoformat(),
+    "tenant_name": db_request.tenant_name,
+    "phone_no": db_request.phone_no,
+    "details": db_request.details,
+    "property_id": db_request.property_id,
+    "is_active": db_request.is_active
+    })
+
     db.commit()
     return {"message": "Request marked as inactive"}
+
+# =========================================KAFKA===============================================
+
+def push_to_kafka(topic: str, value: dict):
+    try:
+        producer.produce(
+            topic=topic,
+            key=str(value.get("property_id") or value.get("room_id") or value.get("request_id")),
+            value=json.dumps(value),
+            callback=delivery_report
+        )
+        producer.flush()
+    except Exception as e:
+        print(f"Failed to push to Kafka: {e}")
