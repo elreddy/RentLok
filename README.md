@@ -68,7 +68,7 @@ Get a real-time overview of your rental business powered by Confluent Kafka inte
 
 <table>
   <tr>
-    <td><img src="Assets/BusinessScreen.JPG" width="210"></td>
+    <td><img src="Assets/BusinessScreen.JPG" width="200"></td>
   </tr>
 </table>
 
