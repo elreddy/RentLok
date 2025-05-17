@@ -91,7 +91,7 @@ def get_current_vacancies():
 @app.get("/daily-requests", response_model=List[DailyRequest])
 def get_daily_requests():
     ksql = """
-        SELECT REQUEST_DATE, R_PROPERTY_ID, PROPERTY_NAME, ADDRESS, TOTAL_REQUESTS
+        SELECT REQUEST_DATE, PROPERTY_ID, PROPERTY_NAME, ADDRESS, TOTAL_REQUESTS
         FROM DAILY_REQUESTS;
     """
     rows = run_ksqldb_query(ksql)
@@ -110,7 +110,7 @@ def get_daily_requests():
 @app.get("/monthly-requests", response_model=List[MonthlyRequest])
 def get_monthly_requests():
     ksql = """
-        SELECT MONTH_YEAR, R_PROPERTY_ID, PROPERTY_NAME, ADDRESS, TOTAL_REQUESTS
+        SELECT YEAR_MONTH, PROPERTY_ID, PROPERTY_NAME, ADDRESS, TOTAL_REQUESTS
         FROM MONTHLY_REQUESTS;
     """
     rows = run_ksqldb_query(ksql)
