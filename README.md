@@ -62,8 +62,38 @@ The **Home** screen acts as the central hub, offering quick access to the core m
 | 📅 **Bookings**     | Create, view, and manage tenant bookings and stay durations                |
 | 💰 **Payments**     | Log and track rent payments, view history, and check dues                  |
 
+## 1) My Business Dashboard:
 
-## 1) Properties: 
+Get a real-time overview of your rental business powered by Confluent Kafka integration.
+
+<table>
+  <tr>
+    <td><img src="Assets/BusinessScreen.JPG" width="210"></td>
+  </tr>
+</table>
+
+### 📊 Real-time Insights
+
+- **Available Rooms** – Live count of vacant rooms per property  
+- **Today's Requests** – Displays how many room rental requests were received today for each property  
+- **Monthly Requests** – Aggregates the total number of requests per property for the current month  
+
+### 🛰️ Kafka Integration
+
+- Powered by **Confluent Kafka** to stream real-time updates from all properties  
+- Kafka topics are updated as tenants request rooms or as room statuses change (e.g., from vacant to occupied)
+
+### 🔍 Use Case
+
+Helps property managers monitor:
+
+- Occupancy status in real-time  
+- Incoming rental demand trends  
+- Property-wise request load across different timeframes (daily, monthly)
+
+> The dashboard ensures you stay informed and responsive to rental activity as it happens.
+
+## 2) Properties: 
 
 Manage rental properties directly from the mobile app.
 <table>
@@ -85,7 +115,7 @@ Manage rental properties directly from the mobile app.
 - 📝 **Update** → Update property info  
 - ❌ **Delete** → Mark property as inactive
 
-## 2) Rooms:
+## 3) Rooms:
 
 Add and manage rooms under each property directly from the mobile app.
 <table>
@@ -107,7 +137,7 @@ Add and manage rooms under each property directly from the mobile app.
 - 📝 **Update** → Update room details  
 - ❌ **Delete** → Mark room as inactive
 
-## 3) Requests:
+## 4) Requests:
 
 Track and manage room rental inquiries for each property from the mobile app.
 
@@ -130,7 +160,7 @@ Track and manage room rental inquiries for each property from the mobile app.
 - 📝 **Update** → (Planned) Update request status or details  
 - ❌ **Delete** → (Planned) Remove closed or invalid requests
 
-## 4) Tenants:
+## 5) Tenants:
 
 Manage tenant details directly within the mobile app.
 
@@ -153,7 +183,7 @@ Manage tenant details directly within the mobile app.
 - 📝 **Update** → Update tenant details  
 - ❌ **Delete** → Mark tenant as vacated or remove record
 
-## 5) Bookings:
+## 6) Bookings:
 
 Track and manage room bookings for properties directly within the mobile app.
 
@@ -176,7 +206,29 @@ Track and manage room bookings for properties directly within the mobile app.
 - 📝 **Update** → Modify booking dates or details  
 - ❌ **Delete** → Cancel or archive a booking
 
+## 7) Payments:
 
+Record and view rental payments made by tenants directly from the mobile app.
+
+<table>
+  <tr>
+    <td><img src="Assets/PaymentsScreen.JPG" width="200"></td>
+    <td><img src="Assets/PaymentsScreen(select).JPG" width="200"></td>
+    <td><img src="Assets/PaymentsScreen(Add).JPG" width="200"></td>
+  </tr>
+</table>
+
+### 📲 Screen
+
+- **View Payments** – Shows a list of all payments made for a specific room or tenant
+- **Add Payment** – Enter payment amount, method, and date for a selected tenant
+
+### 🔧 CRUD Operations
+
+- ✅ **Create** → Add a new payment entry  
+- 📖 **Read** → View payment history by room or tenant  
+- 📝 **Update** → Edit incorrect payment entries  
+- ❌ **Delete** → Remove duplicate or invalid payment entries
 
 The settings icon ⚙️ at the bottom-right provides access to configuration and future customization options.
 
