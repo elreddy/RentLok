@@ -290,6 +290,28 @@ The **PostgreSQL** database is the primary data store for RentLok, supporting pe
 | `payments`     | Stores rent payment records, status, amount, and related booking info       |
 | `requests`     | Captures property inquiry requests from new or prospective tenants          |
 
+## 🔧 Database Index Optimization
+
+To enhance query performance on PostgreSQL, especially for frequently accessed and filtered columns, we introduced targeted indexing strategies across key tables:
+
+### ✅ Index Strategy
+
+- **Single-column indexes** (e.g., `property_id`, `user_id`, `tenant_id`) use the `HASH` index method for faster lookups on equality conditions (`=`).
+- **Composite indexes** (e.g., `room_id + property_id`, `tenant_id + room_id`) use the default `BTREE` method, as PostgreSQL does **not support multicolumn `HASH` indexes**.
+
+### 📈 Performance Benefits
+
+- Speeds up **backend API responses** by optimizing equality-based filtering and JOINs in PostgreSQL.
+- Ensures **low-latency data access** from the Android app through FastAPI endpoints.
+- Minimizes full-table scans and improves scalability as the dataset grows.
+
+> ⚠️ PostgreSQL limitation: `HASH` indexes can only be created on **single columns**. For multi-column queries, `BTREE` remains the optimal and supported strategy.
+
+### 📄 SQL Script
+
+The index creation script is included in the repo:  
+➡️ [`postgresql_indexes.sql`](Backend/postgresql_indexes.sql)
+
 ---
 
 ## 🌀 Confluent Kafka Integration
@@ -306,7 +328,7 @@ The RentLog application uses **Confluent Kafka** with **ksqlDB** for real-time s
   - `rentlok-requests`
   - `rentlok-rooms`
   - `rentlok-properties`
-- **Respective Connector Config Files** are available in directory : [Connectors](Connectors) 
+- **Respective Connector Config Files** are available in repo : [Connectors](Connectors) 
 
 ### 🔄 Stream Processing with ksqlDB
 
