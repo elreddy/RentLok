@@ -8,6 +8,14 @@
 
 This project demonstrates a real-time, event-driven architecture where property and room data is captured through a mobile app, stored in PostgreSQL, and processed asynchronously via Kafka. FastAPI serves as the middleware to connect the app with the database and Kafka topics.
 
+### 🚀 Key Takeaways  
+
+  **Data Engineering & Backend Skills Demonstrated:**  
+- **OLTP Pipeline**: PostgreSQL schema design (3NF), ACID transactions, and indexing for performance.  
+- **Real-Time Streaming**: Kafka event ingestion + ksqlDB aggregations (daily/monthly metrics).  
+- **Modular Architecture**: FastAPI middleware, decoupled Kafka producers/consumers.  
+- **End-to-End Flow**: Android app → REST API → PostgreSQL → Kafka → real-time dashboards.  
+- **Data Integrity**: Pydantic validation + PostgreSQL constraints (FKs, CHECK).  
 ---
 
 ## ✅ Features
@@ -108,7 +116,7 @@ Manage rental properties directly from the mobile app.
 - **View Properties** – Displays all saved properties with basic details
 - **Add Property** – Input property name, address, and number of rooms
 
-### 🔧 CRUD Operations
+#### 🔧 CRUD Operations
 
 - ✅ **Create** → Add new property  
 - 📖 **Read** → View all properties  
@@ -130,7 +138,7 @@ Add and manage rooms under each property directly from the mobile app.
 - **View Rooms** – Displays all rooms under a selected property
 - **Add Room** – Input room number, monthly rent, and availability status
 
-### 🔧 CRUD Operations
+#### 🔧 CRUD Operations
 
 - ✅ **Create** → Add new room under a selected property  
 - 📖 **Read** → View rooms for a selected property  
@@ -153,7 +161,7 @@ Track and manage room rental inquiries for each property from the mobile app.
 - **View Requests** – Displays rental inquiries submitted for a selected property
 - **Add Request** – Capture name, contact, and inquiry notes from interested tenants
 
-### 🔧 CRUD Operations
+#### 🔧 CRUD Operations
 
 - ✅ **Create** → Submit a new room inquiry  
 - 📖 **Read** → View all rental requests for a property  
@@ -176,7 +184,7 @@ Manage tenant details directly within the mobile app.
 - **View Tenants** – Displays all active tenants.
 - **Add Tenant** – Input tenant name, contact info, room number, and check-in date
 
-### 🔧 CRUD Operations
+#### 🔧 CRUD Operations
 
 - ✅ **Create** → Add a new tenant to a room  
 - 📖 **Read** → View tenant list for a property  
@@ -199,7 +207,7 @@ Track and manage room bookings for properties directly within the mobile app.
 - **View Bookings** – Lists all current and past room bookings for a property
 - **Add Booking** – Select room and enter tenant details along with check-in/check-out dates
 
-### 🔧 CRUD Operations
+#### 🔧 CRUD Operations
 
 - ✅ **Create** → Record a new booking for a room  
 - 📖 **Read** → View all bookings under a property  
@@ -223,7 +231,7 @@ Record and view rental payments made by tenants directly from the mobile app.
 - **View Payments** – Shows a list of all payments made for a specific room or tenant
 - **Add Payment** – Enter payment amount, method, and date for a selected tenant
 
-### 🔧 CRUD Operations
+#### 🔧 CRUD Operations
 
 - ✅ **Create** → Add a new payment entry  
 - 📖 **Read** → View payment history by room or tenant  
@@ -368,6 +376,75 @@ All ksqlDB stream and table creation commands are included in the attached file:
 
 ---
 
+## 🚀 How to Deploy & Run Locally
+
+### 1️⃣ Prerequisites
+
+Ensure the following dependencies are installed and properly configured on your local machine:
+
+- **Android Studio**
+- **PostgreSQL** (including **pgAdmin** for DB GUI management)
+- **Python 3.8+**
+- **Confluent Kafka Platform**
+- **Python Packages:**
+  - `fastapi`
+  - `pydantic`
+  - `sqlalchemy`
+  - `confluent-kafka`
+
+These tools form the backbone of RentLok's backend architecture. Make sure all services (PostgreSQL, Kafka brokers, etc.) are up and running before proceeding to the next steps.
+
+### 2️⃣ Setup and Configuration
+
+- **📱 Mobile App:**  
+  - Use the provided build files to generate the APK. [Folder Link](https://drive.google.com/file/d/1MTWlMCDjPcrjGChxxO9xfjXUuFyGm6yf/view?usp=drive_link)
+  - Install the APK on your Android device to interact with the backend services.
+
+- **⚙️ API Services:**  
+  - Download the provided API service scripts.  
+  - Place these scripts in your Python environment directory.
+  - Change the DATABASE and KAFKA URLs in the scripts according to your system configuration.   
+
+- **🐘 PostgreSQL Setup:**  
+  - Create a new database: `rentlok`  
+  - Create a dedicated user: `rentlok`  
+  - Grant necessary permissions to the `rentlok` user to manage the database objects and perform CRUD operations.
+
+- **🧩 Kafka Connect (via Confluent Control Center):**  
+  - Use the provided connector configuration files to create the required **source** and **sink connectors**.  
+  - Set these up using the **Kafka Connect** interface in the Confluent Control Center.
+
+- **⚡ ksqlDB Setup:**  
+  - Launch the ksqlDB editor from Confluent Control Center.  
+  - Use the provided `.sql` scripts to create the necessary **tables** and **streams** for processing event data.
+
+### 3️⃣ Hosting & Public Access (Using ngrok + Uvicorn)
+
+   To make your backend services accessible over the internet using free hosting resources, follow these steps:
+
+- The mobile app includes a **Settings** section where you can paste the public URLs of your backend services.
+- Run your API service scripts locally using **Uvicorn**:
+  ```bash
+  uvicorn script_name:app --host 0.0.0.0 --port 8000
+- Use ngrok to expose your local Uvicorn server to the internet:
+  ```bash
+  ngrok http 8000
+- Copy the public URL generated by ngrok (e.g., https://abcd1234.ngrok.io) and paste it into the corresponding fields in the Settings section of the mobile app.
+  
+ > ⚠️ Important:
+ > - Ensure you update the DATABASE and KAFKA URLs in the API scripts to match your system configuration before running them.
+ > - Each time you restart ngrok, it generates a new URL — make sure to update the app settings accordingly.
+
+### 💡 Why This Approach?
+   This application is currently in its prototype phase, where the focus is on rapid development, testing, and validation of core features. Instead of 
+   investing in custom domains or cloud hosting at this early stage, I chose to leverage free and lightweight tools like:
+    - Uvicorn for running FastAPI services locally
+    - ngrok for securely exposing local services to the internet
+
+This setup also makes the project easily accessible for learning and experimentation without requiring paid infrastructure.
+
+---
+
 ## 📌 Summary & Final Notes
 
 **RentLok** offers an end-to-end solution for rental property management using modern technologies like **PostgreSQL**, **FastAPI**, and **Confluent Kafka**, integrated with a native **Android frontend**.
@@ -377,14 +454,37 @@ All ksqlDB stream and table creation commands are included in the attached file:
 > - Role-based access controls  
 > - User authentication and authorization  
 > - Encrypted communications  
-> - Richer tenant and landlord app features  
+> - Richer tenant and landlord app features
+
+## 🔮 Future Enhancements
+
+As RentLok evolves, I plan to focus on the following features to make the project more robust and production-ready:
+
+- 🔔 Push Notifications: Real-time alerts for new bookings and payment reminders to improve user engagement.  
+- 📊 Admin Analytics Dashboard: A web-based dashboard to monitor key metrics and improve decision-making.  
+- 💾 Cloud Deployment (Azure/GCP/AWS): Deploying the FastAPI + PostgreSQL + Kafka stack on cloud for scalability and production readiness.
 
 ---
 
-## 📬 Connect with Me
+## 🔑 Key Learnings from This Project
 
+- Designing normalized relational schemas suitable for transactional workloads (properties, tenants, bookings).
+- Implementing data validation and consistency using Pydantic and PostgreSQL.
+- Handling real-time event ingestion and processing with Kafka and ksqlDB, showcasing event streaming skills.
+- Building modular components allowing extensibility — a key aspect of scalable data pipeline design.
+- Managing transactional data flows end-to-end from data ingestion to frontend consumption, reflecting practical OLTP pipeline handling.
+
+Overall, this project reflects foundational OLTP and data engineering skills valuable in building scalable, reliable transactional systems.
+
+---
+
+### 🚀 Next Steps: Building OLAP Pipeline
+
+  Work is underway to develop an OLAP pipeline for RentLok to support advanced reporting, data aggregation, and analytical processing on transactional data.
+
+  
+### 📬 Connect with Me
 Feel free to connect for feedback, improvements, or collaboration opportunities.
-
 - 💼 [LinkedIn](https://www.linkedin.com/in/eegapuri-lokeshwar-reddy-281327308)
 - 💻 [GitHub](https://github.com/elreddy)
 - 📧 Email: elokesh4292@gmail.com
