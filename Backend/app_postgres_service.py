@@ -551,6 +551,16 @@ def create_booking(booking: BookingCreate, db: Session = Depends(get_db)):
     db.add(db_booking)
     db.commit()
     db.refresh(db_booking)
+    push_to_kafka("rentlok-rooms",{
+    "room_id": db_room.room_id,
+    "room_no": db_room.room_no,
+    "floor_no": db_room.floor_no,
+    "property_id": db_room.property_id,
+    "operational_status": db_room.operational_status,
+    "room_type": db_room.room_type,
+    "rent_per_month": db_room.rent_per_month,
+    "is_active": db_room.is_active
+    })
     return db_booking
 
 @app.get("/bookings/", response_model=List[BookingResponse])
