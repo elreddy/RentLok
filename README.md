@@ -484,7 +484,7 @@ Overall, this project reflects foundational OLTP and data engineering skills val
 
   
 ### 📬 Connect with Me
-Feel free to connect for feedback, improvements, or collaboration opportunities.
+Feel free to connect for feedback, improvements, or collaboration opportunities. Actively looking for Job opportunities.
 - 💼 [LinkedIn](https://www.linkedin.com/in/eegapuri-lokeshwar-reddy-281327308)
 - 💻 [GitHub](https://github.com/elreddy)
 - 📧 Email: elokesh4292@gmail.com
