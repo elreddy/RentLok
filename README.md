@@ -481,7 +481,7 @@ Overall, this project reflects foundational OLTP and data engineering skills val
 ## 🚀 OLAP Pipeline
 
 To power advanced analytics and reporting on top of our RentLok transactional system, I have built a Snowflake‑based OLAP pipeline that ingests data from PostgreSQL/Kafka into Bronze–Silver–Gold layers, implements SCD Type II dimensions and fact tables, and exposes pre‑aggregated metrics via views. 
-Browse the complete implementation and Streamlit dashboard in the RentLok_OLAP_System repo: [OLAP](https://github.com/elreddy/RentLok_OLAP_System)
+Browse the complete implementation and Streamlit dashboard in the RentLok_OLAP_System repo: [OLAP](https://github.com/elreddy/RentLok_OLAP)
 
   
 ### 📬 Connect with Me
