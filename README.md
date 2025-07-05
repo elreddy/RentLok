@@ -478,15 +478,15 @@ Overall, this project reflects foundational OLTP and data engineering skills val
 
 ---
 
-### 🚀 Next Steps: Building OLAP Pipeline
+## 🚀 OLAP Pipeline
 
-  Work is underway to develop an OLAP pipeline for RentLok to support advanced reporting, data aggregation, and analytical processing on transactional data.
+To power advanced analytics and reporting on top of our RentLok transactional system, I have built a Snowflake‑based OLAP pipeline that ingests data from PostgreSQL/Kafka into Bronze–Silver–Gold layers, implements SCD Type II dimensions and fact tables, and exposes pre‑aggregated metrics via views. 
+Browse the complete implementation and Streamlit dashboard in the RentLok_OLAP_System repo: [OLAP](https://github.com/elreddy/RentLok_OLAP_System)
 
   
 ### 📬 Connect with Me
 Feel free to connect for feedback, improvements, or collaboration opportunities. Actively looking for Job opportunities.
 - 💼 [LinkedIn](https://www.linkedin.com/in/eegapuri-lokeshwar-reddy-281327308)
-- 💻 [GitHub](https://github.com/elreddy)
 - 📧 Email: elokesh4292@gmail.com
 
 
